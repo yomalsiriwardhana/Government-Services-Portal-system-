@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Store - Citizen Services</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/store.css">
+</head>
+<body>
+    <div class="store-container">
+        <header class="store-header">
+            <div class="header-content">
+                <h1>🛍️ Public Store</h1>
+                <p>Quality products and services for Sri Lankan citizens</p>
+            </div>
+            <div class="store-actions">
+                <input type="text" id="store-search" placeholder="Search products..." />
+                <button onclick="toggleFilters()" class="filter-btn">📊 Filters</button>
+                <button onclick="viewCart()" class="cart-btn">
+                    🛒 Cart (<span id="cart-count">0</span>)
+                </button>
+                <a href="/" class="back-btn">← Back to Portal</a>
+            </div>
+        </header>
+
+        <div class="store-layout">
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar" id="filters-sidebar">
+                <h3>🔍 Filters</h3>
+                
+                <div class="filter-group">
+                    <h4>Categories</h4>
+                    <div id="category-filters">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Price Range</h4>
+                    <input type="range" id="price-range" min="0" max="500000" step="1000" value="500000" />
+                    <div class="price-display">
+                        <span>LKR </span><span id="min-price">0</span> - 
+                        <span>LKR </span><span id="max-price">500,000</span>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Delivery Options</h4>
+                    <label><input type="checkbox" name="delivery" value="delivery" /> 🚚 Home Delivery</label>
+                    <label><input type="checkbox" name="delivery" value="pickup" /> 🏪 Store Pickup</label>
+                    <label><input type="checkbox" name="delivery" value="online" /> 💻 Online</label>
+                </div>
+                
+                <button onclick="applyFilters()" class="apply-filters-btn">Apply Filters</button>
+                <button onclick="clearFilters()" class="clear-filters-btn">Clear All</button>
+            </aside>
+
+            <!-- Products Grid -->
+            <main class="products-section">
+                <div class="products-header">
+                    <h2 id="products-title">Featured Products</h2>
+                    <div class="sort-options">
+                        <label>Sort by:</label>
+                        <select id="sort-by" onchange="loadProducts()">
+                            <option value="featured">Featured</option>
+                            <option value="price_low">Price: Low to High</option>
+                            <option value="price_high">Price: High to Low</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="newest">Newest First</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="products-grid" id="products-container">
+                    <!-- Products will be loaded here -->
+                </div>
+                
+                <div class="loading" id="loading">Loading products...</div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>🛒 Shopping Cart</h2>
+            <div id="cart-items"></div>
+            <div class="cart-total">
+                <strong>Total: LKR <span id="cart-total">0</span></strong>
+            </div>
+            <button onclick="checkout()" class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification-toast" class="notification-toast"></div>
+
+    <script src="/static/store.js"></script>
+</body>
+</html>

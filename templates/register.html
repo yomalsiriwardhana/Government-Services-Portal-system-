@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Citizen Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group small {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .children-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .add-child-btn {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .optional-tag {
+            background: #ffa502;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-container">
+            <h1>Create Your Account <span class="ai-badge">🤖 AI-Powered</span></h1>
+            <p>Join the Citizen Services Portal for personalized service recommendations</p>
+            <p style="color: #667eea; font-size: 14px;">✨ Our AI will automatically categorize you for the best experience</p>
+            
+            <form id="enhanced-register-form">
+                
+                <!-- SECTION 1: Basic Information -->
+                <div class="form-section">
+                    <h3>📋 Basic Information</h3>
+                    
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" name="name" required placeholder="Enter your full name">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" name="email" required placeholder="your.email@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" name="phone" required placeholder="0771234567">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password *</label>
+                        <input type="password" name="password" required placeholder="At least 8 characters with letters and numbers">
+                        <small>Password must be at least 8 characters with letters and numbers</small>
+                    </div>
+                </div>
+                
+                <!-- SECTION 2: Personal Details (for AI segmentation) -->
+                <div class="form-section">
+                    <h3>👤 Personal Details <span class="ai-badge">🤖 AI Input</span></h3>
+                    <small style="color: #666;">This helps our AI provide personalized recommendations</small>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Age *</label>
+                            <input type="number" name="age" required min="18" max="100" placeholder="Your age">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Location *</label>
+                            <select name="location" required>
+                                <option value="">Select your district</option>
+                                <option value="Colombo">Colombo</option>
+                                <option value="Gampaha">Gampaha</option>
+                                <option value="Kalutara">Kalutara</option>
+                                <option value="Kandy">Kandy</option>
+                                <option value="Matale">Matale</option>
+                                <option value="Nuwara Eliya">Nuwara Eliya</option>
+                                <option value="Galle">Galle</option>
+                                <option value="Matara">Matara</option>
+                                <option value="Hambantota">Hambantota</option>
+                                <option value="Jaffna">Jaffna</option>
+                                <option value="Kilinochchi">Kilinochchi</option>
+                                <option value="Mannar">Mannar</option>
+                                <option value="Vavuniya">Vavuniya</option>
+                                <option value="Mullaitivu">Mullaitivu</option>
+                                <option value="Batticaloa">Batticaloa</option>
+                                <option value="Ampara">Ampara</option>
+                                <option value="Trincomalee">Trincomalee</option>
+                                <option value="Kurunegala">Kurunegala</option>
+                                <option value="Puttalam">Puttalam</option>
+                                <option value="Anuradhapura">Anuradhapura</option>
+                                <option value="Polonnaruwa">Polonnaruwa</option>
+                                <option value="Badulla">Badulla</option>
+                                <option value="Moneragala">Moneragala</option>
+                                <option value="Ratnapura">Ratnapura</option>
+                                <option value="Kegalle">Kegalle</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SECTION 3: Education & Career (for segmentation) -->
+                <div class="form-section">
+                    <h3>🎓 Education & Career <span class="ai-badge">🤖 AI Input</span></h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Highest Qualification *</label>
+                            <select name="highest_qualification" required>
+                                <option value="">Select qualification</option>
+                                <option value="none">No formal education</option>
+                                <option value="school">Up to Grade 10</option>
+                                <option value="ol">O/L Passed</option>
+                                <option value="al">A/L Passed</option>
+                                <option value="diploma">Diploma</option>
+                                <option value="degree">Bachelor's Degree</option>
+                                <option value="masters">Master's Degree</option>
+                                <option value="phd">PhD</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Current Job/Occupation *</label>
+                            <input type="text" name="current_job" required placeholder="e.g., Teacher, Government Officer, IT Executive">
+                            <small>💡 This helps AI categorize you accurately</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Years of Experience <span class="optional-tag">Optional</span></label>
+                        <input type="number" name="years_experience" min="0" max="50" placeholder="Years in current field">
+                    </div>
+                </div>
+                
+                <!-- SECTION 4: Family Information (for parent segmentation) -->
+                <div class="form-section">
+                    <h3>👨‍👩‍👧‍👦 Family Information <span class="optional-tag">Optional but Recommended</span></h3>
+                    <small style="color: #666;">Helps us suggest educational services for your children</small>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Marital Status</label>
+                            <select name="marital_status">
+                                <option value="">Select status</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="widowed">Widowed</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Do you have children?</label>
+                            <select name="has_children" onchange="toggleChildrenSection(this)">
+                                <option value="no">No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="children-section" style="display: none;">
+                        <div class="children-section">
+                            <h4>Children Details</h4>
+                            <div id="children-list">
+                                <div class="child-entry">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Child's Age</label>
+                                            <input type="number" name="child_age[]" min="1" max="30" placeholder="Age">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Education Level</label>
+                                            <select name="child_education[]">
+                                                <option value="">Select level</option>
+                                                <option value="preschool">Preschool</option>
+                                                <option value="primary">Primary (Grade 1-5)</option>
+                                                <option value="secondary">Secondary (Grade 6-9)</option>
+                                                <option value="ol_prep">O/L Preparation (Grade 10-11)</option>
+                                                <option value="al_prep">A/L Preparation (Grade 12-13)</option>
+                                                <option value="university">University</option>
+                                                <option value="working">Working</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="add-child-btn" onclick="addChildEntry()">+ Add Another Child</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SECTION 5: Interests (for better recommendations) -->
+                <div class="form-section">
+                    <h3>🎯 Interests <span class="ai-badge">🤖 AI Input</span></h3>
+                    <small style="color: #666;">Select areas you're interested in (helps our AI personalize your experience)</small>
+                    
+                    <div class="form-group">
+                        <label>Select your interests:</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                            <label><input type="checkbox" name="interests" value="Education"> 🎓 Education</label>
+                            <label><input type="checkbox" name="interests" value="Health"> 🏥 Health</label>
+                            <label><input type="checkbox" name="interests" value="Business"> 💼 Business</label>
+                            <label><input type="checkbox" name="interests" value="Immigration"> ✈️ Immigration</label>
+                            <label><input type="checkbox" name="interests" value="Employment"> 👔 Employment</label>
+                            <label><input type="checkbox" name="interests" value="Technology"> 💻 Technology</label>
+                            <label><input type="checkbox" name="interests" value="Transport"> 🚗 Transport</label>
+                            <label><input type="checkbox" name="interests" value="Housing"> 🏠 Housing</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SECTION 6: Consent -->
+                <div class="form-section">
+                    <h3>🔒 Privacy & Consent</h3>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="marketing_emails" value="true">
+                            I agree to receive marketing emails about relevant services and offers
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="personalized_ads" value="true" checked>
+                            I agree to receive personalized advertisements based on my profile
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="data_analytics" value="true" checked>
+                            I agree to allow my data to be used for analytics to improve services
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="terms" required>
+                            I agree to the <a href="/api/privacy/policy" target="_blank">Terms of Service and Privacy Policy</a> *
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">🤖 Create Account & Auto-Categorize</button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                Already have an account? <a href="/login">Sign In</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <h3>🤖 AI is analyzing your profile...</h3>
+            <div class="spinner"></div>
+            <p>Creating your account and assigning categories</p>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle children section
+        function toggleChildrenSection(select) {
+            const section = document.getElementById('children-section');
+            section.style.display = select.value === 'yes' ? 'block' : 'none';
+        }
+        
+        // Add another child entry
+        function addChildEntry() {
+            const childList = document.getElementById('children-list');
+            const newChild = document.createElement('div');
+            newChild.className = 'child-entry';
+            newChild.innerHTML = `
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label>Child's Age</label>
+                        <input type="number" name="child_age[]" min="1" max="30" placeholder="Age">
+                    </div>
+                    <div class="form-group">
+                        <label>Education Level</label>
+                        <select name="child_education[]">
+                            <option value="">Select level</option>
+                            <option value="preschool">Preschool</option>
+                            <option value="primary">Primary (Grade 1-5)</option>
+                            <option value="secondary">Secondary (Grade 6-9)</option>
+                            <option value="ol_prep">O/L Preparation (Grade 10-11)</option>
+                            <option value="al_prep">A/L Preparation (Grade 12-13)</option>
+                            <option value="university">University</option>
+                            <option value="working">Working</option>
+                        </select>
+                    </div>
+                </div>
+            `;
+            childList.appendChild(newChild);
+        }
+        
+        // Handle form submission
+        document.getElementById('enhanced-register-form').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            // Show loading
+            document.getElementById('loading-overlay').style.display = 'flex';
+            
+            const formData = new FormData(e.target);
+            
+            // Collect children data
+            const childAges = formData.getAll('child_age[]').filter(age => age);
+            const childEducation = formData.getAll('child_education[]').filter(edu => edu);
+            
+            // Collect interests
+            const interests = formData.getAll('interests');
+            
+            // Build registration payload - IMPORTANT: Include job field
+            const payload = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                password: formData.get('password'),
+                age: parseInt(formData.get('age')),
+                location: formData.get('location'),
+                job: formData.get('current_job'), // THIS IS KEY FOR AI CATEGORIZATION
+                interests: interests
+            };
+            
+            try {
+                // Step 1: Register user (AI auto-categorization happens here)
+                const registerRes = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                
+                const registerData = await registerRes.json();
+                
+                if (registerData.success) {
+                    const userId = registerData.user_id;
+                    
+                    // Step 2: Save extended profile
+                    const extendedProfile = {
+                        profile_id: userId,
+                        marital_status: formData.get('marital_status'),
+                        children: childAges.map((age, i) => `Child ${i+1}`),
+                        children_ages: childAges.map(age => parseInt(age)),
+                        children_education: childEducation,
+                        highest_qualification: formData.get('highest_qualification'),
+                        current_job: formData.get('current_job'),
+                        years_experience: parseInt(formData.get('years_experience')) || 0,
+                        marketing_emails: formData.get('marketing_emails') === 'true',
+                        personalized_ads: formData.get('personalized_ads') === 'true',
+                        data_analytics: formData.get('data_analytics') === 'true'
+                    };
+                    
+                    await fetch('/api/profile/extended', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(extendedProfile)
+                    });
+                    
+                    // Hide loading
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    
+                    // Show success message with AI categories
+                    if (registerData.ai_categories) {
+                        alert('✅ Registration successful!\n\n🤖 AI Categories assigned:\n' + 
+                              registerData.ai_categories.join(', ') + 
+                              '\n\nYou can now login.');
+                    } else {
+                        alert('✅ Registration successful! You can now login.');
+                    }
+                    
+                    window.location.href = '/login';
+                } else {
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    alert('❌ Registration failed: ' + registerData.message);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                document.getElementById('loading-overlay').style.display = 'none';
+                alert('❌ Registration failed. Please try again.');
+            }
+        };
+    </script>
+</body>
+</html>

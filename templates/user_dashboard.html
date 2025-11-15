@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>My Dashboard - Citizen Services Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>My Dashboard</h1>
+            <div class="user-actions">
+                <span id="user-name">Loading...</span>
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
+        </header>
+        
+        <div class="dashboard-content">
+            <div class="dashboard-grid">
+                <div class="dashboard-card stats-card">
+                    <h3>Account Summary</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number" id="engagement-count">0</span>
+                            <span class="stat-label">Services Accessed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="account-age">0</span>
+                            <span class="stat-label">Days Member</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-indicator" id="profile-status">Incomplete</span>
+                            <span class="stat-label">Profile Status</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Recommended Services</h3>
+                    <div id="recommendations-list">
+                        <div class="loading">Loading recommendations...</div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Recent Activity</h3>
+                    <div id="recent-activity">
+                        <div class="loading">Loading activity...</div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <a href="/" class="action-btn">Browse Services</a>
+                        <a href="/profile" class="action-btn">Edit Profile</a>
+                        <button class="action-btn" onclick="showAISearch()">Ask AI Assistant</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Search Modal -->
+        <div id="ai-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>AI Assistant</h3>
+                <div class="search-input-container">
+                    <input type="text" id="modal-search-input" placeholder="Ask about any government service...">
+                    <button id="modal-search-btn">Search</button>
+                </div>
+                <div id="modal-search-results" class="search-results"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>

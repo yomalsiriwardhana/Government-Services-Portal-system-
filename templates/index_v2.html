@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Citizen Services Portal</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Auth Bar -->
+    <div class="auth-bar" id="auth-bar">
+        <div class="auth-status" id="auth-status">
+            <span id="auth-message">Welcome! Sign in for personalized recommendations</span>
+            <div class="auth-buttons" id="auth-buttons">
+                <a href="/login" class="auth-link">Sign In</a>
+                <a href="/register" class="auth-link signup">Sign Up</a>
+            </div>
+            <div class="user-info" id="user-info" style="display: none;">
+                <span id="user-greeting">Welcome back!</span>
+                <a href="/dashboard" class="auth-link">My Dashboard</a>
+                <button id="logout-link" class="auth-link logout">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar with Categories -->
+        <aside class="sidebar">
+            <h2>Categories</h2>
+            <div id="category-list"></div>
+            <div class="lang-switch">
+                <button onclick="setLang('en')">English</button>
+                <button onclick="setLang('si')">සිංහල</button>
+                <button onclick="setLang('ta')">தமிழ்</button>
+            </div>
+            <!-- Ads Area -->
+            <div class="ads-section">
+                <h3>Announcements</h3>
+                <div id="ads-area"></div>
+            </div>
+        </aside>
+
+        <!-- Middle Section -->
+        <section class="middle">
+            <!-- Search with Autosuggest -->
+            <div class="search-box">
+                <input id="search-input" placeholder="Search services or ask a question..." />
+                <button onclick="openChat()">Ask AI</button>
+            </div>
+            <div id="suggestions" class="suggestions"></div>
+            
+            <h2 id="sub-title">Select Subservice</h2>
+            <ul id="sub-list"></ul>
+        </section>
+
+        <!-- Content Area -->
+        <main class="content">
+            <h2 id="q-title">Select Question</h2>
+            <ul id="question-list"></ul>
+            <div id="answer-box"></div>
+        </main>
+
+        <!-- AI Chat Panel (Hidden by default) -->
+        <aside class="chat-panel" id="chat-panel" style="display:none;">
+            <div class="chat-header">
+                <h3>🤖 AI Assistant</h3>
+                <button onclick="closeChat()">&times;</button>
+            </div>
+            <div class="chat-body" id="chat-body"></div>
+            <div class="chat-input">
+                <input id="chat-text" placeholder="Type your question..." onkeypress="if(event.key==='Enter') sendChat()" />
+                <button onclick="sendChat()">Send</button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Progressive Profile Modal -->
+    <div id="profile-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeProfileModal()">&times;</span>
+            <h3 id="profile-step-title">Tell us about you</h3>
+            
+            <!-- Step 1 -->
+            <div id="profile-step-1" class="profile-step">
+                <input id="p_name" placeholder="Full name" />
+                <input id="p_age" placeholder="Age" type="number" />
+                <button onclick="profileNext(1)">Next</button>
+            </div>
+            
+            <!-- Step 2 -->
+            <div id="profile-step-2" class="profile-step" style="display:none;">
+                <input id="p_email" placeholder="Email" type="email" />
+                <input id="p_phone" placeholder="Mobile" type="tel" />
+                <button onclick="profileBack(2)">Back</button>
+                <button onclick="profileNext(2)">Next</button>
+            </div>
+            
+            <!-- Step 3 -->
+            <div id="profile-step-3" class="profile-step" style="display:none;">
+                <input id="p_job" placeholder="Job role / workplace" />
+                <button onclick="profileBack(3)">Back</button>
+                <button onclick="profileSubmit()">Finish</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

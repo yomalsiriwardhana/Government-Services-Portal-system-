@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .dashboard-header h1 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-header p {
+            color: #666;
+        }
+
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            float: right;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .metric-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .metric-card .value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .metric-card .change {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .change.positive {
+            color: #2ecc71;
+        }
+
+        .change.negative {
+            color: #e74c3c;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .chart-card h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .segments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .segment-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .segment-badge .count {
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .products-table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .products-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .products-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .products-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 18px;
+        }
+
+        #login-box {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        #login-box h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        #login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        #login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #login-box button:hover {
+            background: #5568d3;
+        }
+
+        #dashboard {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Box -->
+    <div id="login-box" style="display: block;">
+        <h2>🔐 Admin Login</h2>
+        <form id="login-form">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard-container">
+        <div class="dashboard-header">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            <h1>📊 Enhanced Admin Dashboard</h1>
+            <p>Comprehensive analytics and insights</p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Users</h3>
+                <div class="value" id="total-users">-</div>
+                <div class="change positive" id="new-users">-</div>
+            </div>
+            <div class="metric-card">
+                <h3>Active Users (30d)</h3>
+                <div class="value" id="active-users">-</div>
+            </div>
+            <div class="metric-card">
+                <h3>Total Engagements</h3>
+                <div class="value" id="total-engagements">-</div>
+                <div class="change" id="recent-engagements">-</div>
+            </div>
+            <div class="metric-card">
+                <h3>Total Orders</h3>
+                <div class="value" id="total-orders">-</div>
+            </div>
+            <div class="metric-card">
+                <h3>Revenue</h3>
+                <div class="value" id="total-revenue">-</div>
+            </div>
+            <div class="metric-card">
+                <h3>Conversion Rate</h3>
+                <div class="value" id="conversion-rate">-</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>👥 User Age Distribution</h3>
+                <canvas id="ageChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>💼 Job Distribution</h3>
+                <canvas id="jobChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>🎯 Popular Services</h3>
+                <canvas id="serviceChart"></canvas>
+            </div>
+        </div>
+
+        <!-- User Segments -->
+        <div class="chart-card">
+            <h3>👨‍👩‍👧‍👦 User Segmentation</h3>
+            <div class="segments-grid" id="segments-grid">
+                <!-- Segments will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Popular Products -->
+        <div class="chart-card" style="margin-top: 20px;">
+            <h3>⭐ Top Rated Products</h3>
+            <div class="products-table">
+                <table id="products-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price (LKR)</th>
+                            <th>Rating</th>
+                            <th>Reviews</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Products will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">Loading dashboard...</div>
+
+    <script src="/static/admin.js"></script>
+    <script>
+        // Override loadDashboard to use new data structure
+        async function loadDashboard() {
+            const dashEl = document.getElementById("dashboard");
+            const loading = document.getElementById("loading");
+            
+            try {
+                loading.style.display = 'block';
+                const r = await fetch('/api/admin/insights');
+                
+                if (r.status === 401) {
+                    document.getElementById("login-box").style.display = "block";
+                    dashEl.style.display = "none";
+                    loading.style.display = 'none';
+                    return;
+                }
+                
+                const data = await r.json();
+                
+                document.getElementById("login-box").style.display = "none";
+                dashEl.style.display = "block";
+                loading.style.display = 'none';
+                
+                // Update metrics
+                document.getElementById('total-users').textContent = data.user_metrics.total_users;
+                document.getElementById('active-users').textContent = data.user_metrics.active_users;
+                document.getElementById('new-users').textContent = `+${data.user_metrics.new_users_7d} this week`;
+                document.getElementById('total-engagements').textContent = data.engagement_metrics.total_engagements;
+                document.getElementById('recent-engagements').textContent = `${data.engagement_metrics.recent_engagements} recent`;
+                document.getElementById('total-orders').textContent = data.store_metrics.total_orders;
+                document.getElementById('total-revenue').textContent = `LKR ${data.store_metrics.total_revenue.toLocaleString()}`;
+                document.getElementById('conversion-rate').textContent = data.store_metrics.conversion_rate;
+                
+                // Age Chart
+                new Chart(document.getElementById("ageChart"), {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(data.age_groups),
+                        datasets: [{
+                            label: "Users by Age Group",
+                            data: Object.values(data.age_groups),
+                            backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                            borderColor: 'rgba(102, 126, 234, 1)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+                
+                // Jobs Chart
+                new Chart(document.getElementById("jobChart"), {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(data.jobs),
+                        datasets: [{
+                            data: Object.values(data.jobs),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.6)',
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(255, 205, 86, 0.6)',
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(153, 102, 255, 0.6)',
+                                'rgba(255, 159, 64, 0.6)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+                
+                // Services Chart
+                new Chart(document.getElementById("serviceChart"), {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(data.services),
+                        datasets: [{
+                            data: Object.values(data.services),
+                            backgroundColor: [
+                                'rgba(34, 197, 94, 0.6)',
+                                'rgba(168, 85, 247, 0.6)',
+                                'rgba(239, 68, 68, 0.6)',
+                                'rgba(245, 158, 11, 0.6)',
+                                'rgba(6, 182, 212, 0.6)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+                
+                // User Segments
+                const segmentsGrid = document.getElementById('segments-grid');
+                segmentsGrid.innerHTML = '';
+                Object.entries(data.user_segments).forEach(([segment, count]) => {
+                    const badge = document.createElement('div');
+                    badge.className = 'segment-badge';
+                    badge.innerHTML = `
+                        <span class="count">${count}</span>
+                        ${segment.replace(/_/g, ' ')}
+                    `;
+                    segmentsGrid.appendChild(badge);
+                });
+                
+                // Popular Products
+                const tbody = document.querySelector('#products-table tbody');
+                tbody.innerHTML = '';
+                data.popular_products.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${product.name}</td>
+                        <td>${product.price.toLocaleString()}</td>
+                        <td>${'★'.repeat(Math.floor(product.rating))}</td>
+                        <td>${product.reviews_count}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+            } catch (error) {
+                console.error('Dashboard error:', error);
+                loading.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            window.location.href = '/admin/login';
+        }
+
+        // Load dashboard on page load
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

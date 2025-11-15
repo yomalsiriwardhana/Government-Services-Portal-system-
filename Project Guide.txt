@@ -1,0 +1,24 @@
+terminal : python app.py
+User link : http://127.0.0.1:5000/
+Admin Link : http://127.0.0.1:5000/admin
+
+
+🚀 Government Services Portal – Empowering Citizens with Technology
+
+I developed a comprehensive web application that simplifies access to government services for citizens. The portal provides multiple interfaces: traditional browsing, AI-powered search, and personalized recommendations.
+
+Key Highlights:
+
+	Frontend: Built with HTML, CSS, and JavaScript for responsive and user-friendly interfaces.
+
+	Backend: Python Flask handles server-side logic efficiently.
+
+	Database: MongoDB Atlas stores data securely in the cloud.
+
+	APIs: Facilitates smooth communication between frontend and backend.
+
+	AI-Powered Search: Uses Machine Learning with FAISS for semantic search, understanding the meaning 	behind queries instead of exact word matches.
+
+	Security: Implemented bcrypt for secure password hashing to protect user data.
+
+This project demonstrates how modern web development, AI, and cloud technologies can combine to create a smart, secure, and efficient platform for public service delivery.

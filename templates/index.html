@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Citizen Services Portal - Enhanced</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Auth Bar -->
+    <div class="auth-bar" id="auth-bar">
+        <div class="auth-status" id="auth-status">
+            <span id="auth-message">Welcome! Sign in for personalized recommendations</span>
+            <div class="auth-buttons" id="auth-buttons">
+                <a href="/login" class="auth-link">Sign In</a>
+                <a href="/register" class="auth-link signup">Sign Up</a>
+            </div>
+            <div class="user-info" id="user-info" style="display: none;">
+                <span id="user-greeting">Welcome back!</span>
+                <a href="/dashboard" class="auth-link">My Dashboard</a>
+                <button id="logout-link" class="auth-link logout">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar with Categories -->
+        <aside class="sidebar">
+            <h2>Categories</h2>
+            <div id="category-list"></div>
+            <div class="lang-switch">
+                <button onclick="setLang('en')">English</button>
+                <button onclick="setLang('si')">සිංහල</button>
+                <button onclick="setLang('ta')">தமிழ்</button>
+            </div>
+            <!-- Ads Area -->
+            <div class="ads-section">
+                <h3>📢 Announcements</h3>
+                <div id="ads-area"></div>
+            </div>
+        </aside>
+
+        <!-- Middle Section -->
+        <section class="middle">
+            <!-- Search with AI Button -->
+            <div class="search-box">
+                <input id="search-input" placeholder="Search services or ask a question..." />
+                <button onclick="openChat()" class="ai-btn">🤖 Ask AI</button>
+            </div>
+            <div id="suggestions" class="suggestions"></div>
+            
+            <h2 id="sub-title">Select Subservice</h2>
+            <ul id="sub-list"></ul>
+        </section>
+
+        <!-- Content Area -->
+        <main class="content">
+            <h2 id="q-title">Select Question</h2>
+            <ul id="question-list"></ul>
+            <div id="answer-box"></div>
+        </main>
+
+        <!-- AI Chat Panel (Hidden by default) -->
+        <aside class="chat-panel" id="chat-panel" style="display:none;">
+            <div class="chat-header">
+                <h3>🤖 AI Assistant</h3>
+                <button onclick="closeChat()">&times;</button>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="welcome-msg">
+                    👋 Hello! I'm your AI assistant. Ask me anything about government services!
+                </div>
+            </div>
+            <div class="chat-input">
+                <input id="chat-text" placeholder="Type your question..." onkeypress="if(event.key==='Enter') sendChat()" />
+                <button onclick="sendChat()">Send</button>
+            </div>
+        </aside>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
