@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Government Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --success-green: #10b981;
+            --danger-red: #dc2626;
+            --warning-orange: #f59e0b;
+            --bg-gray: #f3f4f6;
+            --white: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-gray: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .admin-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Sidebar */
+        .admin-container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 250px;
+            background: white;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+            padding: 2rem 0;
+        }
+
+        .menu-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-dark);
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: var(--light-blue);
+            border-left-color: var(--secondary-blue);
+        }
+
+        .menu-item.active {
+            background: var(--light-blue);
+            border-left-color: var(--secondary-blue);
+            color: var(--secondary-blue);
+            font-weight: 600;
+        }
+
+        .menu-item i {
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-light);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--secondary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue);
+        }
+
+        .btn-success {
+            background: var(--success-green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: var(--danger-red);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-warning {
+            background: var(--warning-orange);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--border-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--bg-gray);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        tr:hover {
+            background: var(--bg-gray);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: var(--success-green);
+        }
+
+        .badge-warning {
+            background: #fed7aa;
+            color: var(--warning-orange);
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: var(--danger-red);
+        }
+
+        .badge-info {
+            background: var(--light-blue);
+            color: var(--secondary-blue);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            margin: 2rem;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--border-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 2px solid var(--border-gray);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: var(--success-green);
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: var(--danger-red);
+            border: 1px solid #fecaca;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            border: 4px solid var(--border-gray);
+            border-top: 4px solid var(--secondary-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .product-image-preview {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="admin-title">
+            <i class="fas fa-shield-alt"></i>
+            <span>Admin Dashboard</span>
+        </div>
+        <div class="user-info">
+            <span id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Container -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="menu-item active" onclick="showSection('overview')">
+                <i class="fas fa-chart-line"></i>
+                <span>Overview</span>
+            </div>
+            <div class="menu-item" onclick="showSection('users')">
+                <i class="fas fa-users"></i>
+                <span>Manage Users</span>
+            </div>
+            <div class="menu-item" onclick="showSection('announcements')">
+                <i class="fas fa-bullhorn"></i>
+                <span>Manage Announcements</span>
+            </div>
+            <div class="menu-item" onclick="showSection('products')">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Manage Products</span>
+            </div>
+            <div class="menu-item" onclick="showSection('services')">
+                <i class="fas fa-cog"></i>
+                <span>Manage Services</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Overview Section -->
+            <div id="overview" class="content-section active">
+                <div class="page-header">
+                    <h1>Dashboard Overview</h1>
+                    <p>Welcome to the admin dashboard</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <div class="stat-value" id="totalUsers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Announcements</h3>
+                        <div class="stat-value" id="totalAnnouncements">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Products</h3>
+                        <div class="stat-value" id="totalProducts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Services</h3>
+                        <div class="stat-value" id="totalServices">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div id="users" class="content-section">
+                <div class="page-header">
+                    <h1>Manage Users</h1>
+                    <p>View and manage all registered users</p>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>All Users</h2>
+                    </div>
+                    <div id="usersTableContainer">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading users...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements Section -->
+            <div id="announcements" class="content-section">
+                <div class="page-header">
+                    <h1>Manage Announcements</h1>
+                    <p>Create, edit, and delete announcements</p>
+                </div>
+
+                <div id="alertBoxAnnouncements" class="alert"></div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>All Announcements</h2>
+                        <button class="btn btn-primary" onclick="openAnnouncementModal()">
+                            <i class="fas fa-plus"></i> Add Announcement
+                        </button>
+                    </div>
+                    <div id="announcementsTableContainer">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading announcements...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section -->
+            <div id="products" class="content-section">
+                <div class="page-header">
+                    <h1>Manage Products</h1>
+                    <p>Add, edit, and manage all products in the marketplace</p>
+                </div>
+
+                <div id="alertBoxProducts" class="alert"></div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>All Products</h2>
+                        <button class="btn btn-primary" onclick="openProductModal()">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                    <div id="productsTableContainer">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading products...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div id="services" class="content-section">
+                <div class="page-header">
+                    <h1>Manage Services</h1>
+                    <p>View and manage government services</p>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h2>All Services</h2>
+                    </div>
+                    <p style="padding: 2rem; text-align: center; color: var(--text-light);">
+                        Service management coming soon...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Announcement Modal -->
+    <div id="announcementModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="announcementModalTitle">Add Announcement</h2>
+                <button class="modal-close" onclick="closeAnnouncementModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="announcementForm">
+                    <input type="hidden" id="announcementId">
+                    
+                    <div class="form-group">
+                        <label for="announcementTitle">Title *</label>
+                        <input type="text" id="announcementTitle" required placeholder="Enter announcement title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="announcementContent">Content *</label>
+                        <textarea id="announcementContent" required placeholder="Enter announcement content"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="announcementType">Type</label>
+                            <select id="announcementType">
+                                <option value="general">General</option>
+                                <option value="important">Important</option>
+                                <option value="urgent">Urgent</option>
+                                <option value="notice">Notice</option>
+                                <option value="update">Update</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="announcementPriority">Priority</label>
+                            <select id="announcementPriority">
+                                <option value="normal">Normal</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="announcementStatus">Status</label>
+                        <select id="announcementStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeAnnouncementModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveAnnouncement()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="productModalTitle">Add Product</h2>
+                <button class="modal-close" onclick="closeProductModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    
+                    <div class="form-group">
+                        <label for="productTitle">Product Title *</label>
+                        <input type="text" id="productTitle" required placeholder="Enter product title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">Description *</label>
+                        <textarea id="productDescription" required placeholder="Enter product description"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productPrice">Price (Rs.) *</label>
+                            <input type="number" id="productPrice" required placeholder="0.00" step="0.01" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productCategory">Category *</label>
+                            <select id="productCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="shoes">Shoes</option>
+                                <option value="books">Books</option>
+                                <option value="vehicles">Vehicles</option>
+                                <option value="land">Land & Property</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="furniture">Furniture</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productLocation">Location</label>
+                            <input type="text" id="productLocation" placeholder="Enter location">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productCondition">Condition</label>
+                            <select id="productCondition">
+                                <option value="New">New</option>
+                                <option value="Used">Used</option>
+                                <option value="Refurbished">Refurbished</option>
+                                <option value="N/A">N/A</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="productSeller">Seller Name</label>
+                            <input type="text" id="productSeller" placeholder="Enter seller name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productContact">Contact</label>
+                            <input type="text" id="productContact" placeholder="Enter contact number/email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productImage">Image URL (optional)</label>
+                        <input type="url" id="productImage" placeholder="https://example.com/image.jpg">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="productFeatured">
+                                <label for="productFeatured" style="margin: 0;">Featured Product</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productStatus">Status</label>
+                            <select id="productStatus">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeProductModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProduct()">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let currentAnnouncementEditId = null;
+        let currentProductEditId = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadStats();
+        });
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login-simple.html';
+                return;
+            }
+
+            const userName = localStorage.getItem('userName');
+            if (userName) {
+                document.getElementById('adminName').textContent = userName;
+            }
+        }
+
+        // Show section
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active from menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+
+            // Set active menu item
+            event.target.closest('.menu-item').classList.add('active');
+
+            // Load data based on section
+            if (sectionId === 'users') {
+                loadUsers();
+            } else if (sectionId === 'announcements') {
+                loadAnnouncements();
+            } else if (sectionId === 'products') {
+                loadProducts();
+            }
+        }
+
+        // Load stats
+        async function loadStats() {
+            try {
+                // Load announcements count
+                const announcementsResponse = await fetch(`${API_URL}/announcements/`);
+                const announcementsData = await announcementsResponse.json();
+                document.getElementById('totalAnnouncements').textContent = announcementsData.count || 0;
+
+                // Load products count
+                const productsResponse = await fetch(`${API_URL}/products/`);
+                const productsData = await productsResponse.json();
+                document.getElementById('totalProducts').textContent = productsData.count || 0;
+
+                // Load services count
+                const servicesResponse = await fetch(`${API_URL}/services/`);
+                const servicesData = await servicesResponse.json();
+                document.getElementById('totalServices').textContent = servicesData.services.length || 0;
+
+                // Placeholder for users
+                document.getElementById('totalUsers').textContent = '5';
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load users
+        async function loadUsers() {
+            const container = document.getElementById('usersTableContainer');
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-light);">
+                                User management coming soon...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // ===== ANNOUNCEMENTS FUNCTIONS =====
+
+        // Load announcements
+        async function loadAnnouncements() {
+            const container = document.getElementById('announcementsTableContainer');
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading announcements...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_URL}/announcements/`);
+                const data = await response.json();
+
+                if (data.announcements && data.announcements.length > 0) {
+                    container.innerHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.announcements.map(announcement => `
+                                    <tr>
+                                        <td>${announcement.title}</td>
+                                        <td><span class="badge badge-info">${announcement.type}</span></td>
+                                        <td><span class="badge badge-${announcement.priority === 'high' ? 'warning' : 'success'}">${announcement.priority}</span></td>
+                                        <td><span class="badge badge-${announcement.status === 'active' ? 'success' : 'danger'}">${announcement.status}</span></td>
+                                        <td>${new Date(announcement.created_at).toLocaleDateString()}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-primary" onclick="editAnnouncement('${announcement._id}')">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" onclick="deleteAnnouncement('${announcement._id}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <p style="padding: 2rem; text-align: center; color: var(--text-light);">
+                            No announcements found. Click "Add Announcement" to create one.
+                        </p>
+                    `;
+                }
+
+                document.getElementById('totalAnnouncements').textContent = data.count || 0;
+            } catch (error) {
+                console.error('Error loading announcements:', error);
+                container.innerHTML = `
+                    <p style="padding: 2rem; text-align: center; color: var(--danger-red);">
+                        Error loading announcements. Please try again.
+                    </p>
+                `;
+            }
+        }
+
+        function openAnnouncementModal(announcement = null) {
+            const modal = document.getElementById('announcementModal');
+            const modalTitle = document.getElementById('announcementModalTitle');
+            
+            if (announcement) {
+                modalTitle.textContent = 'Edit Announcement';
+                document.getElementById('announcementId').value = announcement._id;
+                document.getElementById('announcementTitle').value = announcement.title;
+                document.getElementById('announcementContent').value = announcement.content;
+                document.getElementById('announcementType').value = announcement.type;
+                document.getElementById('announcementPriority').value = announcement.priority;
+                document.getElementById('announcementStatus').value = announcement.status;
+                currentAnnouncementEditId = announcement._id;
+            } else {
+                modalTitle.textContent = 'Add Announcement';
+                document.getElementById('announcementForm').reset();
+                document.getElementById('announcementId').value = '';
+                currentAnnouncementEditId = null;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeAnnouncementModal() {
+            document.getElementById('announcementModal').classList.remove('active');
+            document.getElementById('announcementForm').reset();
+            currentAnnouncementEditId = null;
+        }
+
+        async function saveAnnouncement() {
+            const title = document.getElementById('announcementTitle').value.trim();
+            const content = document.getElementById('announcementContent').value.trim();
+            const type = document.getElementById('announcementType').value;
+            const priority = document.getElementById('announcementPriority').value;
+            const status = document.getElementById('announcementStatus').value;
+
+            if (!title || !content) {
+                showAlert('Please fill in all required fields', 'error', 'Announcements');
+                return;
+            }
+
+            const announcementData = {
+                title: title,
+                content: content,
+                type: type,
+                priority: priority,
+                status: status
+            };
+
+            try {
+                let response;
+                if (currentAnnouncementEditId) {
+                    response = await fetch(`${API_URL}/announcements/${currentAnnouncementEditId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(announcementData)
+                    });
+                } else {
+                    response = await fetch(`${API_URL}/announcements/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(announcementData)
+                    });
+                }
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert(currentAnnouncementEditId ? 'Announcement updated successfully!' : 'Announcement created successfully!', 'success', 'Announcements');
+                    closeAnnouncementModal();
+                    loadAnnouncements();
+                    loadStats();
+                } else {
+                    showAlert(data.error || 'Failed to save announcement', 'error', 'Announcements');
+                }
+            } catch (error) {
+                console.error('Error saving announcement:', error);
+                showAlert('Error saving announcement. Please try again.', 'error', 'Announcements');
+            }
+        }
+
+        async function editAnnouncement(id) {
+            try {
+                const response = await fetch(`${API_URL}/announcements/${id}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    openAnnouncementModal(data.announcement);
+                } else {
+                    showAlert('Error loading announcement', 'error', 'Announcements');
+                }
+            } catch (error) {
+                console.error('Error loading announcement:', error);
+                showAlert('Error loading announcement', 'error', 'Announcements');
+            }
+        }
+
+        async function deleteAnnouncement(id) {
+            if (!confirm('Are you sure you want to delete this announcement?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/announcements/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('Announcement deleted successfully!', 'success', 'Announcements');
+                    loadAnnouncements();
+                    loadStats();
+                } else {
+                    showAlert(data.error || 'Failed to delete announcement', 'error', 'Announcements');
+                }
+            } catch (error) {
+                console.error('Error deleting announcement:', error);
+                showAlert('Error deleting announcement. Please try again.', 'error', 'Announcements');
+            }
+        }
+
+        // ===== PRODUCTS FUNCTIONS =====
+
+        // Load products
+        async function loadProducts() {
+            const container = document.getElementById('productsTableContainer');
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading products...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(`${API_URL}/products/`);
+                const data = await response.json();
+
+                if (data.products && data.products.length > 0) {
+                    container.innerHTML = `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Location</th>
+                                    <th>Featured</th>
+                                    <th>Status</th>
+                                    <th>Views</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.products.map(product => `
+                                    <tr>
+                                        <td>${product.title}</td>
+                                        <td><span class="badge badge-info">${product.category}</span></td>
+                                        <td>Rs. ${product.price ? product.price.toLocaleString() : '0'}</td>
+                                        <td>${product.location || '-'}</td>
+                                        <td><span class="badge badge-${product.featured ? 'warning' : 'info'}">${product.featured ? 'Yes' : 'No'}</span></td>
+                                        <td><span class="badge badge-${product.status === 'active' ? 'success' : 'danger'}">${product.status}</span></td>
+                                        <td>${product.view_count || 0}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-primary" onclick="editProduct('${product._id}')">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" onclick="deleteProduct('${product._id}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <p style="padding: 2rem; text-align: center; color: var(--text-light);">
+                            No products found. Click "Add Product" to create one.
+                        </p>
+                    `;
+                }
+
+                document.getElementById('totalProducts').textContent = data.count || 0;
+            } catch (error) {
+                console.error('Error loading products:', error);
+                container.innerHTML = `
+                    <p style="padding: 2rem; text-align: center; color: var(--danger-red);">
+                        Error loading products. Please try again.
+                    </p>
+                `;
+            }
+        }
+
+        function openProductModal(product = null) {
+            const modal = document.getElementById('productModal');
+            const modalTitle = document.getElementById('productModalTitle');
+            
+            if (product) {
+                modalTitle.textContent = 'Edit Product';
+                document.getElementById('productId').value = product._id;
+                document.getElementById('productTitle').value = product.title;
+                document.getElementById('productDescription').value = product.description;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productCategory').value = product.category;
+                document.getElementById('productLocation').value = product.location || '';
+                document.getElementById('productCondition').value = product.condition || 'New';
+                document.getElementById('productSeller').value = product.seller || '';
+                document.getElementById('productContact').value = product.contact || '';
+                document.getElementById('productImage').value = product.image || '';
+                document.getElementById('productFeatured').checked = product.featured || false;
+                document.getElementById('productStatus').value = product.status;
+                currentProductEditId = product._id;
+            } else {
+                modalTitle.textContent = 'Add Product';
+                document.getElementById('productForm').reset();
+                document.getElementById('productId').value = '';
+                currentProductEditId = null;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('active');
+            document.getElementById('productForm').reset();
+            currentProductEditId = null;
+        }
+
+        async function saveProduct() {
+            const title = document.getElementById('productTitle').value.trim();
+            const description = document.getElementById('productDescription').value.trim();
+            const price = document.getElementById('productPrice').value;
+            const category = document.getElementById('productCategory').value;
+            const location = document.getElementById('productLocation').value.trim();
+            const condition = document.getElementById('productCondition').value;
+            const seller = document.getElementById('productSeller').value.trim();
+            const contact = document.getElementById('productContact').value.trim();
+            const image = document.getElementById('productImage').value.trim();
+            const featured = document.getElementById('productFeatured').checked;
+            const status = document.getElementById('productStatus').value;
+
+            if (!title || !description || !price || !category) {
+                showAlert('Please fill in all required fields', 'error', 'Products');
+                return;
+            }
+
+            const productData = {
+                title: title,
+                description: description,
+                price: parseFloat(price),
+                category: category,
+                location: location,
+                condition: condition,
+                seller: seller || 'Admin',
+                contact: contact,
+                image: image,
+                featured: featured,
+                status: status
+            };
+
+            try {
+                let response;
+                if (currentProductEditId) {
+                    response = await fetch(`${API_URL}/products/${currentProductEditId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(productData)
+                    });
+                } else {
+                    response = await fetch(`${API_URL}/products/`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(productData)
+                    });
+                }
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert(currentProductEditId ? 'Product updated successfully!' : 'Product created successfully!', 'success', 'Products');
+                    closeProductModal();
+                    loadProducts();
+                    loadStats();
+                } else {
+                    showAlert(data.error || 'Failed to save product', 'error', 'Products');
+                }
+            } catch (error) {
+                console.error('Error saving product:', error);
+                showAlert('Error saving product. Please try again.', 'error', 'Products');
+            }
+        }
+
+        async function editProduct(id) {
+            try {
+                const response = await fetch(`${API_URL}/products/${id}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    openProductModal(data.product);
+                } else {
+                    showAlert('Error loading product', 'error', 'Products');
+                }
+            } catch (error) {
+                console.error('Error loading product:', error);
+                showAlert('Error loading product', 'error', 'Products');
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/products/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('Product deleted successfully!', 'success', 'Products');
+                    loadProducts();
+                    loadStats();
+                } else {
+                    showAlert(data.error || 'Failed to delete product', 'error', 'Products');
+                }
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                showAlert('Error deleting product. Please try again.', 'error', 'Products');
+            }
+        }
+
+        // Show alert
+        function showAlert(message, type, section) {
+            const alertBox = document.getElementById(`alertBox${section}`);
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'login-simple.html';
+        }
+
+        // Close modals on outside click
+        document.getElementById('announcementModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAnnouncementModal();
+            }
+        });
+
+        document.getElementById('productModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProductModal();
+            }
+        });
+    </script>
+</body>
+</html>

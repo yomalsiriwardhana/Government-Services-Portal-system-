@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - Government Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1e40af;
+            --secondary-blue: #3b82f6;
+            --light-blue: #dbeafe;
+            --success-green: #10b981;
+            --bg-gray: #f3f4f6;
+            --white: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --border-gray: #e5e7eb;
+            --hover-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Top Navigation Bar */
+        .top-bar {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .portal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+        }
+
+        .search-btn {
+            padding: 0.75rem 2rem;
+            background: var(--secondary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-blue);
+        }
+
+        /* Category Pills */
+        .category-filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .category-pill {
+            padding: 0.5rem 1.25rem;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            border: 2px solid transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .category-pill:hover {
+            background: var(--secondary-blue);
+            color: white;
+        }
+
+        .category-pill.active {
+            background: var(--secondary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        /* Products Grid */
+        .products-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid var(--border-gray);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-btn.active {
+            background: var(--secondary-blue);
+            color: white;
+            border-color: var(--secondary-blue);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .products-grid.list-view {
+            grid-template-columns: 1fr;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--success-green);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .product-badge.featured {
+            background: #f59e0b;
+        }
+
+        .product-info {
+            padding: 1.25rem;
+        }
+
+        .product-category {
+            color: var(--secondary-blue);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .product-description {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--success-green);
+        }
+
+        .product-location {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .product-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--secondary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue);
+        }
+
+        .btn-secondary {
+            padding: 0.75rem;
+            background: white;
+            color: var(--secondary-blue);
+            border: 2px solid var(--secondary-blue);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-blue);
+        }
+
+        /* List View Styles */
+        .products-grid.list-view .product-card {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .products-grid.list-view .product-image {
+            width: 250px;
+            height: auto;
+            min-height: 200px;
+        }
+
+        .products-grid.list-view .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            border: 4px solid var(--border-gray);
+            border-top: 4px solid var(--secondary-blue);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results p {
+            color: var(--text-light);
+        }
+
+        /* Product Detail Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: rgba(0,0,0,0.7);
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+
+        .modal-details h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .modal-price {
+            font-size: 2rem;
+            color: var(--success-green);
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .modal-description {
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-info-item {
+            padding: 1rem;
+            background: var(--bg-gray);
+            border-radius: 8px;
+        }
+
+        .modal-info-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .modal-info-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-large {
+            flex: 1;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* Seller Info */
+        .seller-info {
+            background: var(--bg-gray);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .seller-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .seller-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .seller-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .seller-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .seller-rating {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid.list-view .product-card {
+                flex-direction: column;
+            }
+
+            .products-grid.list-view .product-image {
+                width: 100%;
+                height: 220px;
+            }
+
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+
+            .view-toggle {
+                display: none;
+            }
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid var(--border-gray);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--secondary-blue);
+            color: white;
+            border-color: var(--secondary-blue);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-btn.active {
+            background: var(--secondary-blue);
+            color: white;
+            border-color: var(--secondary-blue);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <a href="dashboard-enhanced.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </a>
+            <div class="portal-title">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Marketplace</span>
+            </div>
+        </div>
+        <div class="top-bar-right">
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Guest</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>🛍️ Government Portal Marketplace</h1>
+            <p>Discover and purchase shoes, books, vehicles, land, and everything you need!</p>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="search-filter-section">
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search for products...">
+                <button class="search-btn" onclick="searchProducts()">
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
+                </button>
+            </div>
+            <div class="category-filters" id="categoryFilters">
+                <button class="category-pill active" data-category="all">All Products</button>
+                <button class="category-pill" data-category="shoes">👟 Shoes</button>
+                <button class="category-pill" data-category="books">📚 Books</button>
+                <button class="category-pill" data-category="vehicles">🚗 Vehicles</button>
+                <button class="category-pill" data-category="land">🏞️ Land & Property</button>
+                <button class="category-pill" data-category="electronics">📱 Electronics</button>
+                <button class="category-pill" data-category="furniture">🛋️ Furniture</button>
+                <button class="category-pill" data-category="clothing">👕 Clothing</button>
+                <button class="category-pill" data-category="other">🎁 Other</button>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="products-section">
+            <div class="section-header">
+                <h2 class="section-title" id="sectionTitle">All Products</h2>
+                <div class="view-toggle">
+                    <button class="view-btn active" onclick="setView('grid')">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" onclick="setView('list')">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loadingState" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading products...</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here dynamically -->
+            </div>
+
+            <!-- No Results -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No Products Found</h3>
+                <p>Try adjusting your search or filters</p>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <!-- Pagination will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- Product details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_URL = 'http://localhost:5000/api';
+        let currentCategory = 'all';
+        let currentView = 'grid';
+        let allProducts = [];
+        let filteredProducts = [];
+        let currentPage = 1;
+        const productsPerPage = 12;
+
+        // Category icons mapping
+        const categoryIcons = {
+            'shoes': '👟',
+            'books': '📚',
+            'vehicles': '🚗',
+            'land': '🏞️',
+            'electronics': '📱',
+            'furniture': '🛋️',
+            'clothing': '👕',
+            'other': '🎁'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserProfile();
+            loadProducts();
+            setupEventListeners();
+        });
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Category filters
+            const categoryButtons = document.querySelectorAll('.category-pill');
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.dataset.category;
+                    filterProducts();
+                });
+            });
+
+            // Search input with enter key
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchProducts();
+                }
+            });
+
+            // Close modal on outside click
+            document.getElementById('productModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Load User Profile
+        function loadUserProfile() {
+            const token = localStorage.getItem('token');
+            const userName = localStorage.getItem('userName');
+            
+            if (userName) {
+                document.getElementById('userName').textContent = userName;
+                document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
+            }
+        }
+
+        // Load Products from API
+        async function loadProducts() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch(`${API_URL}/products/`, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load products');
+                }
+
+                const data = await response.json();
+                allProducts = data.products || [];
+                
+                // If no products from API, load sample data
+                if (allProducts.length === 0) {
+                    allProducts = getSampleProducts();
+                }
+                
+                filteredProducts = [...allProducts];
+                displayProducts();
+            } catch (error) {
+                console.error('Error loading products:', error);
+                // Load sample data on error
+                allProducts = getSampleProducts();
+                filteredProducts = [...allProducts];
+                displayProducts();
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Get Sample Products (for demo purposes)
+        function getSampleProducts() {
+            return [
+                {
+                    _id: '1',
+                    title: 'Nike Air Max 270',
+                    description: 'Comfortable running shoes with excellent cushioning. Perfect for daily wear and sports activities.',
+                    category: 'shoes',
+                    price: 15999,
+                    location: 'Colombo',
+                    image: null,
+                    featured: true,
+                    condition: 'New',
+                    seller: 'SportZone',
+                    rating: 4.5,
+                    views: 245
+                },
+                {
+                    _id: '2',
+                    title: 'The Psychology of Money',
+                    description: 'Best-selling book about financial wisdom and making smart decisions with money.',
+                    category: 'books',
+                    price: 2500,
+                    location: 'Kandy',
+                    image: null,
+                    featured: false,
+                    condition: 'New',
+                    seller: 'BookMart',
+                    rating: 4.8,
+                    views: 189
+                },
+                {
+                    _id: '3',
+                    title: 'Toyota Aqua 2019',
+                    description: 'Hybrid vehicle in excellent condition. Low mileage, well maintained, complete service records.',
+                    category: 'vehicles',
+                    price: 4500000,
+                    location: 'Colombo',
+                    image: null,
+                    featured: true,
+                    condition: 'Used',
+                    seller: 'Auto Traders',
+                    rating: 4.7,
+                    views: 567
+                },
+                {
+                    _id: '4',
+                    title: 'Commercial Land - Negombo',
+                    description: '20 perches of prime commercial land located near main road. Perfect for business development.',
+                    category: 'land',
+                    price: 25000000,
+                    location: 'Negombo',
+                    image: null,
+                    featured: true,
+                    condition: 'N/A',
+                    seller: 'Prime Properties',
+                    rating: 4.9,
+                    views: 432
+                },
+                {
+                    _id: '5',
+                    title: 'iPhone 14 Pro Max',
+                    description: 'Latest iPhone model with 256GB storage. Includes all original accessories and warranty.',
+                    category: 'electronics',
+                    price: 425000,
+                    location: 'Gampaha',
+                    image: null,
+                    featured: false,
+                    condition: 'New',
+                    seller: 'TechStore',
+                    rating: 4.6,
+                    views: 321
+                },
+                {
+                    _id: '6',
+                    title: 'L-Shape Sofa Set',
+                    description: 'Modern 5-seater L-shape sofa in premium fabric. Comfortable and stylish for your living room.',
+                    category: 'furniture',
+                    price: 89000,
+                    location: 'Colombo',
+                    image: null,
+                    featured: false,
+                    condition: 'New',
+                    seller: 'Home Decor',
+                    rating: 4.4,
+                    views: 156
+                },
+                {
+                    _id: '7',
+                    title: 'Adidas Running Shoes',
+                    description: 'Lightweight running shoes perfect for marathon training and daily jogging.',
+                    category: 'shoes',
+                    price: 12500,
+                    location: 'Kandy',
+                    image: null,
+                    featured: false,
+                    condition: 'New',
+                    seller: 'SportZone',
+                    rating: 4.3,
+                    views: 98
+                },
+                {
+                    _id: '8',
+                    title: 'Rich Dad Poor Dad',
+                    description: 'Classic personal finance book teaching valuable money lessons.',
+                    category: 'books',
+                    price: 1800,
+                    location: 'Colombo',
+                    image: null,
+                    featured: false,
+                    condition: 'New',
+                    seller: 'BookMart',
+                    rating: 4.9,
+                    views: 234
+                },
+                {
+                    _id: '9',
+                    title: 'Honda Vezel 2020',
+                    description: 'Hybrid SUV with premium features. Perfect family vehicle with spacious interior.',
+                    category: 'vehicles',
+                    price: 6200000,
+                    location: 'Galle',
+                    image: null,
+                    featured: false,
+                    condition: 'Used',
+                    seller: 'Auto Traders',
+                    rating: 4.5,
+                    views: 678
+                },
+                {
+                    _id: '10',
+                    title: 'Residential Land - Kandy',
+                    description: '15 perches of land in quiet residential area. Clear title, ready to build.',
+                    category: 'land',
+                    price: 8500000,
+                    location: 'Kandy',
+                    image: null,
+                    featured: false,
+                    condition: 'N/A',
+                    seller: 'Prime Properties',
+                    rating: 4.7,
+                    views: 289
+                },
+                {
+                    _id: '11',
+                    title: 'MacBook Pro M2',
+                    description: '13-inch MacBook Pro with M2 chip, 16GB RAM, 512GB SSD. Perfect for professionals.',
+                    category: 'electronics',
+                    price: 485000,
+                    location: 'Colombo',
+                    image: null,
+                    featured: true,
+                    condition: 'New',
+                    seller: 'TechStore',
+                    rating: 4.8,
+                    views: 445
+                },
+                {
+                    _id: '12',
+                    title: 'Dining Table Set',
+                    description: 'Elegant 6-seater dining table with chairs. Solid wood construction.',
+                    category: 'furniture',
+                    price: 65000,
+                    location: 'Negombo',
+                    image: null,
+                    featured: false,
+                    condition: 'New',
+                    seller: 'Home Decor',
+                    rating: 4.5,
+                    views: 134
+                }
+            ];
+        }
+
+        // Filter Products
+        function filterProducts() {
+            if (currentCategory === 'all') {
+                filteredProducts = [...allProducts];
+            } else {
+                filteredProducts = allProducts.filter(product => 
+                    product.category === currentCategory
+                );
+            }
+            
+            currentPage = 1;
+            displayProducts();
+        }
+
+        // Search Products
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                filterProducts();
+                return;
+            }
+            
+            filteredProducts = allProducts.filter(product => 
+                product.title.toLowerCase().includes(searchTerm) ||
+                product.description.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm)
+            );
+            
+            currentPage = 1;
+            displayProducts();
+        }
+
+        // Display Products
+        function displayProducts() {
+            const productsGrid = document.getElementById('productsGrid');
+            const noResults = document.getElementById('noResults');
+            const pagination = document.getElementById('pagination');
+            
+            if (filteredProducts.length === 0) {
+                productsGrid.innerHTML = '';
+                noResults.style.display = 'block';
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+            const productsToShow = filteredProducts.slice(startIndex, endIndex);
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            
+            // Generate products HTML
+            productsGrid.innerHTML = productsToShow.map(product => `
+                <div class="product-card" onclick="openProductModal('${product._id}')">
+                    <div class="product-image">
+                        ${categoryIcons[product.category] || '🛍️'}
+                        ${product.featured ? '<span class="product-badge featured">Featured</span>' : ''}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category}</div>
+                        <h3 class="product-title">${product.title}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-details">
+                            <div class="product-price">Rs. ${product.price.toLocaleString()}</div>
+                            <div class="product-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${product.location}
+                            </div>
+                        </div>
+                        <div class="product-meta">
+                            <div class="product-meta-item">
+                                <i class="fas fa-eye"></i>
+                                ${product.views || 0} views
+                            </div>
+                            <div class="product-meta-item">
+                                <i class="fas fa-star"></i>
+                                ${product.rating || 0} rating
+                            </div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-primary" onclick="event.stopPropagation(); buyNow('${product._id}')">
+                                <i class="fas fa-shopping-cart"></i>
+                                Buy Now
+                            </button>
+                            <button class="btn-secondary" onclick="event.stopPropagation(); contactSeller('${product._id}')">
+                                <i class="fas fa-comment"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Display pagination
+            if (totalPages > 1) {
+                pagination.style.display = 'flex';
+                pagination.innerHTML = `
+                    <button class="pagination-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    ${generatePageNumbers(totalPages)}
+                    <button class="pagination-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                `;
+            } else {
+                pagination.style.display = 'none';
+            }
+            
+            // Update section title
+            const categoryName = currentCategory === 'all' ? 'All Products' : 
+                currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1);
+            document.getElementById('sectionTitle').textContent = `${categoryName} (${filteredProducts.length})`;
+        }
+
+        // Generate Page Numbers
+        function generatePageNumbers(totalPages) {
+            let pages = '';
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    pages += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    pages += '<span>...</span>';
+                }
+            }
+            return pages;
+        }
+
+        // Change Page
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                displayProducts();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Set View (Grid/List)
+        function setView(view) {
+            currentView = view;
+            const productsGrid = document.getElementById('productsGrid');
+            const viewButtons = document.querySelectorAll('.view-btn');
+            
+            viewButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.view-btn').classList.add('active');
+            
+            if (view === 'list') {
+                productsGrid.classList.add('list-view');
+            } else {
+                productsGrid.classList.remove('list-view');
+            }
+        }
+
+        // Open Product Modal
+        function openProductModal(productId) {
+            const product = allProducts.find(p => p._id === productId);
+            if (!product) return;
+            
+            const modal = document.getElementById('productModal');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div>
+                    <div class="modal-image">
+                        ${categoryIcons[product.category] || '🛍️'}
+                    </div>
+                </div>
+                <div class="modal-details">
+                    <div class="product-category">${product.category}</div>
+                    <h2>${product.title}</h2>
+                    <div class="modal-price">Rs. ${product.price.toLocaleString()}</div>
+                    <p class="modal-description">${product.description}</p>
+                    
+                    <div class="modal-info-grid">
+                        <div class="modal-info-item">
+                            <div class="modal-info-label">Condition</div>
+                            <div class="modal-info-value">${product.condition}</div>
+                        </div>
+                        <div class="modal-info-item">
+                            <div class="modal-info-label">Location</div>
+                            <div class="modal-info-value">${product.location}</div>
+                        </div>
+                        <div class="modal-info-item">
+                            <div class="modal-info-label">Views</div>
+                            <div class="modal-info-value">${product.views || 0}</div>
+                        </div>
+                        <div class="modal-info-item">
+                            <div class="modal-info-label">Rating</div>
+                            <div class="modal-info-value">${product.rating || 0} ⭐</div>
+                        </div>
+                    </div>
+                    
+                    <div class="seller-info">
+                        <h3>Seller Information</h3>
+                        <div class="seller-details">
+                            <div class="seller-avatar">${product.seller.charAt(0)}</div>
+                            <div>
+                                <div class="seller-name">${product.seller}</div>
+                                <div class="seller-rating">⭐ ${product.rating || 0} rating</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button class="btn-primary btn-large" onclick="buyNow('${product._id}')">
+                            <i class="fas fa-shopping-cart"></i>
+                            Buy Now
+                        </button>
+                        <button class="btn-secondary btn-large" onclick="contactSeller('${product._id}')">
+                            <i class="fas fa-comment"></i>
+                            Contact Seller
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+            trackProductView(productId);
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        // Track Product View
+        async function trackProductView(productId) {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+            
+            try {
+                await fetch(`${API_URL}/products/${productId}/click`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error('Error tracking view:', error);
+            }
+        }
+
+        // Buy Now
+        function buyNow(productId) {
+            const product = allProducts.find(p => p._id === productId);
+            if (!product) return;
+            
+            alert(`Purchase initiated for: ${product.title}\nPrice: Rs. ${product.price.toLocaleString()}\n\nThis is a demo. In production, this would redirect to payment gateway.`);
+            
+            // Track the click
+            trackProductView(productId);
+        }
+
+        // Contact Seller
+        function contactSeller(productId) {
+            const product = allProducts.find(p => p._id === productId);
+            if (!product) return;
+            
+            alert(`Contact seller: ${product.seller}\n\nThis is a demo. In production, this would open a chat or contact form.`);
+        }
+
+        // Show Loading
+        function showLoading(show) {
+            document.getElementById('loadingState').style.display = show ? 'block' : 'none';
+            document.getElementById('productsGrid').style.display = show ? 'none' : 'grid';
+        }
+    </script>
+</body>
+</html>

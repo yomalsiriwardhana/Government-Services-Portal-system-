@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Portal - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #667eea;
+            --secondary-blue: #764ba2;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --light-blue: #f0f0ff;
+            --success-green: #38ef7d;
+            --bg-gray: #f8fafc;
+            --white: #ffffff;
+            --text-dark: #1a1a2e;
+            --text-light: #6b7280;
+            --border-gray: #e5e7eb;
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Navigation Bar */
+        .top-bar {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .portal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .language-selector {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .language-selector option {
+            color: var(--text-dark);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* Main Container */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-section h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+        }
+
+        .search-btn {
+            padding: 1rem 2rem;
+            background: var(--secondary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-blue);
+        }
+
+        .ai-search-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .ai-search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        /* AI Modal Styles */
+        .ai-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.3s;
+        }
+
+        .ai-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .ai-modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .ai-modal-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-modal-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+        }
+
+        .ai-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+
+        .ai-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .ai-modal-body {
+            padding: 2rem;
+        }
+
+        .ai-input-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .ai-input-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .ai-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .ai-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+        }
+
+        .ai-submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.3s;
+        }
+
+        .ai-submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .ai-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .ai-results {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .ai-results.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .ai-answer-section {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .ai-answer-title {
+            font-weight: 600;
+            color: #8b5cf6;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-answer-text {
+            color: var(--text-dark);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .ai-confidence {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .ai-sources {
+            margin-top: 1.5rem;
+        }
+
+        .ai-sources-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ai-source-card {
+            background: white;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .ai-source-card:hover {
+            border-color: #8b5cf6;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+        }
+
+        .ai-source-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .ai-source-type {
+            display: inline-block;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .ai-source-ministry {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .ai-loading {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+
+        .ai-loading.active {
+            display: block;
+        }
+
+        .ai-spinner {
+            border: 4px solid rgba(139, 92, 246, 0.2);
+            border-top: 4px solid #8b5cf6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .ai-loading-text {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Quick Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.blue {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
+
+        .stat-icon.green {
+            background: #d1fae5;
+            color: var(--success-green);
+        }
+
+        .stat-icon.purple {
+            background: #e9d5ff;
+            color: #8b5cf6;
+        }
+
+        .stat-icon.orange {
+            background: #fed7aa;
+            color: #f97316;
+        }
+
+        .stat-content h3 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        .view-all-btn {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: gap 0.3s;
+        }
+
+        .view-all-btn:hover {
+            gap: 0.75rem;
+        }
+
+        /* Announcements */
+        .announcements-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .announcement-item {
+            padding: 1rem;
+            border-left: 4px solid var(--secondary-blue);
+            background: var(--light-blue);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1rem;
+        }
+
+        .announcement-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .announcement-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .announcement-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .announcement-text {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Advertisements Section */
+        .advertisements-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .ads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .ad-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ad-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .ad-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .ad-card:hover::before {
+            opacity: 1;
+        }
+
+        .ad-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .ad-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .ad-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .ad-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+
+        .ad-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .ad-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: scale(1.05);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+        }
+
+        .spinner {
+            border: 4px solid var(--border-gray);
+            border-top: 4px solid var(--secondary-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .welcome-section h1 {
+                font-size: 1.5rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ads-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-modal-content {
+                width: 95%;
+                max-height: 95vh;
+            }
+
+            .ai-modal-body {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 10000;
+            animation: slideInUp 0.3s ease;
+        }
+
+        .notification-toast.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .notification-toast.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+        }
+
+        .notification-text {
+            font-weight: 500;
+        }
+
+        /* ========================================
+           FLOATING AI CHATBOT STYLES
+           ======================================== */
+
+        /* Floating Chat Button */
+        .chat-float-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            animation: pulse-glow 2s infinite;
+        }
+
+        .chat-float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5);
+        }
+
+        .chat-float-btn i {
+            font-size: 1.8rem;
+            color: white;
+        }
+
+        .chat-float-btn .chat-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 8px 35px rgba(139, 92, 246, 0.6);
+            }
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 380px;
+            max-height: 550px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            display: none;
+            flex-direction: column;
+            z-index: 9998;
+            overflow: hidden;
+            animation: slideUpChat 0.3s ease;
+        }
+
+        .chat-panel.active {
+            display: flex;
+        }
+
+        @keyframes slideUpChat {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-header-info i {
+            font-size: 1.5rem;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .chat-header p {
+            margin: 0;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .chat-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .chat-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Chat Messages Area */
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 320px;
+        }
+
+        /* Message Bubbles */
+        .chat-message {
+            display: flex;
+            gap: 0.5rem;
+            max-width: 85%;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .chat-message.ai {
+            align-self: flex-start;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .chat-message.user .message-avatar {
+            background: var(--secondary-blue);
+            color: white;
+        }
+
+        .chat-message.ai .message-avatar {
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            color: white;
+        }
+
+        .message-content {
+            padding: 0.85rem 1rem;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .chat-message.user .message-content {
+            background: var(--secondary-blue);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.ai .message-content {
+            background: white;
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.85rem 1rem;
+            background: white;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+
+            0%,
+            80%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+
+            40% {
+                transform: translateY(-6px);
+                opacity: 1;
+            }
+        }
+
+        /* Autosuggestions */
+        .chat-suggestions {
+            padding: 0.75rem 1rem;
+            background: white;
+            border-top: 1px solid var(--border-gray);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .suggestion-chip {
+            background: #f0f4ff;
+            color: #8b5cf6;
+            border: 1px solid #e0e7ff;
+            padding: 0.4rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-chip:hover {
+            background: #8b5cf6;
+            color: white;
+            border-color: #8b5cf6;
+        }
+
+        /* Chat Input Area */
+        .chat-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid var(--border-gray);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: #8b5cf6;
+        }
+
+        .chat-send-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Welcome Message */
+        .chat-welcome {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .chat-welcome i {
+            font-size: 2.5rem;
+            color: #8b5cf6;
+            margin-bottom: 0.75rem;
+        }
+
+        .chat-welcome h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-welcome p {
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Chatbot */
+        @media (max-width: 480px) {
+            .chat-panel {
+                width: calc(100% - 20px);
+                right: 10px;
+                bottom: 100px;
+                max-height: 70vh;
+            }
+
+            .chat-float-btn {
+                right: 20px;
+                bottom: 20px;
+                width: 55px;
+                height: 55px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <div class="top-bar-left">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Home</span>
+            </button>
+            <div class="portal-title">
+                <i class="fas fa-landmark"></i>
+                <span>Government Portal</span>
+            </div>
+        </div>
+        <div class="top-bar-right">
+            <select class="language-selector" id="languageSelector">
+                <option value="en">English</option>
+                <option value="si">සිංහල</option>
+                <option value="ta">தமிழ்</option>
+            </select>
+            <div class="user-profile" id="userProfile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span id="userName">Guest</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1>Welcome to Government Services Portal</h1>
+            <p>Access all government services in one place. Search, apply, and track your applications easily.</p>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 style="margin-bottom: 1rem; color: var(--text-dark);">🔍 Find Government Services</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput"
+                    placeholder="Search for services, documents, or information...">
+                <button class="search-btn" onclick="performSearch()">
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
+                </button>
+                <button class="ai-search-btn" onclick="openAISearch()">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Search</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="totalServices">0</h3>
+                    <p>Total Services</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="completedApplications">0</h3>
+                    <p>Completed</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="pendingApplications">0</h3>
+                    <p>Pending</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="stat-content">
+                    <h3 id="totalSearches">0</h3>
+                    <p>Total Searches</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popular Services -->
+        <div class="section-header">
+            <h2 class="section-title">Popular Services</h2>
+            <a href="services.html" class="view-all-btn">
+                View All <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="services-grid" id="servicesGrid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading services...</p>
+            </div>
+        </div>
+
+        <!-- Announcements -->
+        <div class="section-header">
+            <h2 class="section-title">📢 Announcements</h2>
+        </div>
+        <div class="announcements-container" id="announcementsContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading announcements...</p>
+            </div>
+        </div>
+
+        <!-- Advertisements Section -->
+        <div class="section-header">
+            <h2 class="section-title">🛍️ Featured Advertisements</h2>
+            <a href="marketplace.html" class="view-all-btn">
+                View All Products <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="advertisements-section">
+            <div class="ads-grid" id="adsGrid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading advertisements...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Search Modal -->
+    <div class="ai-modal" id="aiModal">
+        <div class="ai-modal-content">
+            <div class="ai-modal-header">
+                <h2>
+                    <i class="fas fa-brain"></i>
+                    AI-Powered Search
+                </h2>
+                <button class="ai-close-btn" onclick="closeAISearch()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="ai-modal-body">
+                <div class="ai-input-container">
+                    <label for="aiSearchInput">
+                        <i class="fas fa-question-circle"></i>
+                        Ask me anything about government services:
+                    </label>
+                    <input type="text" class="ai-input" id="aiSearchInput"
+                        placeholder="e.g., How do I get a driving license?">
+                </div>
+                <button class="ai-submit-btn" onclick="performAISearchModal()" id="aiSubmitBtn">
+                    <i class="fas fa-magic"></i>
+                    <span>Get AI Answer</span>
+                </button>
+
+                <!-- Loading State -->
+                <div class="ai-loading" id="aiLoading">
+                    <div class="ai-spinner"></div>
+                    <div class="ai-loading-text">
+                        AI is analyzing your question and searching for the best answer...
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="ai-results" id="aiResults">
+                    <div class="ai-answer-section">
+                        <div class="ai-answer-title">
+                            <i class="fas fa-lightbulb"></i>
+                            AI Answer
+                        </div>
+                        <div class="ai-answer-text" id="aiAnswerText"></div>
+                        <span class="ai-confidence" id="aiConfidence"></span>
+                    </div>
+
+                    <div class="ai-sources" id="aiSourcesSection">
+                        <div class="ai-sources-title">
+                            <i class="fas fa-link"></i>
+                            Relevant Services & Information
+                        </div>
+                        <div id="aiSourcesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating AI Chatbot -->
+    <button class="chat-float-btn" id="chatFloatBtn" onclick="toggleChatPanel()">
+        <i class="fas fa-robot"></i>
+        <span class="chat-badge" id="chatBadge" style="display: none;">1</span>
+    </button>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <i class="fas fa-robot"></i>
+                <div>
+                    <h3>AI Assistant</h3>
+                    <p>Ask about government services</p>
+                </div>
+            </div>
+            <button class="chat-close-btn" onclick="toggleChatPanel()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-welcome">
+                <i class="fas fa-robot"></i>
+                <h4>Hello! I'm your AI Assistant</h4>
+                <p>Say <strong>Hi</strong> to start our conversation! I can help you with passport, driving license,
+                    birth certificate, and more!</p>
+            </div>
+        </div>
+
+        <div class="chat-suggestions" id="chatSuggestions">
+            <span class="suggestion-chip" onclick="handleSuggestionClick('Hi')">👋 Hi</span>
+            <span class="suggestion-chip" onclick="handleSuggestionClick('Hello')">👋 Hello</span>
+            <span class="suggestion-chip" onclick="handleSuggestionClick('I need help')">🆘 I need help</span>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your question..."
+                onkeypress="handleChatKeyPress(event)">
+            <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let currentUser = null;
+
+        // Check if ads need refresh on page load
+        document.addEventListener('DOMContentLoaded', async function () {
+            console.log('Dashboard loading...');
+
+            // Check authentication
+            checkAuth();
+
+            // Get user info first
+            await loadUserProfile();
+
+            // Check if user just performed a search or activity
+            const adsNeedRefresh = localStorage.getItem('adsNeedRefresh');
+            if (adsNeedRefresh === 'true') {
+                console.log('🔄 Refreshing ads based on recent activity...');
+
+                // Show brief loading message
+                const adsSection = document.querySelector('.advertisements-section');
+                if (adsSection) {
+                    const originalContent = adsSection.innerHTML;
+                    adsSection.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px;">
+                            <div class="spinner" style="margin: 0 auto 1rem;"></div>
+                            <p style="color: #3b82f6; font-weight: 500;">Updating your personalized ads...</p>
+                        </div>
+                    `;
+
+                    // Wait a moment for backend to process
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Restore original and let loadAdvertisements handle it
+                    adsSection.innerHTML = originalContent;
+                }
+
+                // Clear the flag
+                // Clear the flag and set refreshed flag
+                localStorage.removeItem('adsNeedRefresh');
+                localStorage.setItem('adsJustRefreshed', 'true');
+            }
+
+            // Load all dashboard components
+            loadServices();
+            loadAdvertisements();
+            loadStats();
+            loadAnnouncements();
+
+            // Enable Enter key for AI search
+            document.getElementById('aiSearchInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performAISearchModal();
+                }
+            });
+
+            console.log('✅ Dashboard loaded');
+        });
+
+        // Listen for when user returns to the page (from search)
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                // User returned to the page
+                const adsNeedRefresh = localStorage.getItem('adsNeedRefresh');
+                if (adsNeedRefresh === 'true') {
+                    console.log('🔄 User returned - refreshing ads...');
+                    localStorage.removeItem('adsNeedRefresh');
+                    loadAdvertisements();
+                }
+            }
+        });
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login-simple.html';
+            }
+        }
+
+        // Load user profile
+        function loadUserProfile() {
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+
+            if (userName) {
+                document.getElementById('userName').textContent = userName;
+                document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
+            }
+        }
+
+        // Open AI Search Modal
+        function openAISearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            document.getElementById('aiModal').classList.add('active');
+            if (searchTerm) {
+                document.getElementById('aiSearchInput').value = searchTerm;
+            }
+            document.getElementById('aiSearchInput').focus();
+
+            // Reset results
+            document.getElementById('aiResults').classList.remove('active');
+            document.getElementById('aiLoading').classList.remove('active');
+        }
+
+        // Close AI Search Modal
+        function closeAISearch() {
+            document.getElementById('aiModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('aiModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeAISearch();
+            }
+        });
+
+        // Perform AI Search in Modal
+        async function performAISearchModal() {
+            const query = document.getElementById('aiSearchInput').value.trim();
+
+            if (!query) {
+                alert('Please enter a question');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('aiLoading').classList.add('active');
+            document.getElementById('aiResults').classList.remove('active');
+            document.getElementById('aiSubmitBtn').disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/ai-search/ministry`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displayAIResults(data);
+                } else {
+                    throw new Error(data.error || 'AI search failed');
+                }
+            } catch (error) {
+                console.error('AI Search Error:', error);
+                document.getElementById('aiAnswerText').textContent =
+                    'Sorry, I encountered an error while processing your question. Please try again or use regular search.';
+                document.getElementById('aiConfidence').textContent = 'Error';
+                document.getElementById('aiResults').classList.add('active');
+            } finally {
+                document.getElementById('aiLoading').classList.remove('active');
+                document.getElementById('aiSubmitBtn').disabled = false;
+            }
+        }
+
+        // Display AI Results
+        function displayAIResults(data) {
+            // Display answer
+            document.getElementById('aiAnswerText').textContent = data.answer;
+
+            // Display confidence
+            const confidencePercent = Math.round(data.confidence * 100);
+            document.getElementById('aiConfidence').textContent = `Confidence: ${confidencePercent}%`;
+
+            // Display sources
+            const sourcesList = document.getElementById('aiSourcesList');
+
+            if (data.sources && data.sources.length > 0) {
+                sourcesList.innerHTML = data.sources.map(source => `
+                    <div class="ai-source-card">
+                        <div class="ai-source-name">${source.name}</div>
+                        <span class="ai-source-type">${source.type}</span>
+                        ${source.ministry ? `<span class="ai-source-ministry">${source.ministry}</span>` : ''}
+                    </div>
+                `).join('');
+            } else {
+                sourcesList.innerHTML = '<p style="color: var(--text-light); text-align: center;">No additional sources found</p>';
+            }
+
+            // Show results
+            document.getElementById('aiResults').classList.add('active');
+        }
+
+        // Load services
+        async function loadServices() {
+            try {
+                const response = await fetch(`${API_URL}/services/`);
+                const data = await response.json();
+
+                const servicesGrid = document.getElementById('servicesGrid');
+                const services = data.services.slice(0, 6); // Show top 6 services
+
+                const serviceColors = [
+                    { bg: '#dbeafe', color: '#1e40af' },
+                    { bg: '#d1fae5', color: '#10b981' },
+                    { bg: '#e9d5ff', color: '#8b5cf6' },
+                    { bg: '#fed7aa', color: '#f97316' },
+                    { bg: '#fecaca', color: '#dc2626' },
+                    { bg: '#bae6fd', color: '#0284c7' }
+                ];
+
+                servicesGrid.innerHTML = services.map((service, index) => {
+                    const colors = serviceColors[index % serviceColors.length];
+                    return `
+                        <div class="service-card" onclick="window.location.href='services.html'">
+                            <div class="service-icon" style="background: ${colors.bg}; color: ${colors.color}">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h3>${service.name}</h3>
+                            <p>${service.description}</p>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading services:', error);
+                document.getElementById('servicesGrid').innerHTML = `
+                    <p style="color: var(--text-light); grid-column: 1/-1; text-align: center;">
+                        Unable to load services. Please try again later.
+                    </p>
+                `;
+            }
+        }
+
+        // Load announcements
+        async function loadAnnouncements() {
+            try {
+                const response = await fetch(`${API_URL}/announcements/`);
+                const data = await response.json();
+
+                const announcementsContainer = document.getElementById('announcementsContainer');
+                const announcements = data.announcements.slice(0, 5); // Show top 5
+
+                if (announcements.length === 0) {
+                    announcementsContainer.innerHTML = `
+                        <div class="announcement-item">
+                            <div class="announcement-title">No announcements at this time</div>
+                            <div class="announcement-text">Check back later for updates</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                announcementsContainer.innerHTML = announcements.map(announcement => {
+                    const date = new Date(announcement.created_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+
+                    return `
+                        <div class="announcement-item">
+                            <div class="announcement-date">
+                                <i class="fas fa-calendar"></i> ${date}
+                            </div>
+                            <div class="announcement-title">${announcement.title}</div>
+                            <div class="announcement-text">${announcement.content}</div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading announcements:', error);
+                document.getElementById('announcementsContainer').innerHTML = `
+                    <div class="announcement-item">
+                        <div class="announcement-title">Unable to load announcements</div>
+                        <div class="announcement-text">Please try again later</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Load advertisements ////////////////
+        // Load advertisements
+        async function loadAdvertisements() {
+            try {
+                const token = localStorage.getItem('token');
+
+                // If user not logged in, show message to login
+                if (!token) {
+                    const adsGrid = document.getElementById('adsGrid');
+                    adsGrid.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px;">
+                            <i class="fas fa-sign-in-alt" style="font-size: 3rem; color: #3b82f6; margin-bottom: 1rem;"></i>
+                            <p style="color: #6b7280; margin-bottom: 1rem;">Login to see personalized advertisements</p>
+                            <button onclick="window.location.href='login-simple.html'" 
+                                    style="background: #3b82f6; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-size: 1rem;">
+                                Login Now
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Fetch personalized recommendations
+                const response = await fetch(`${API_URL}/recommendations?limit=6`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load recommendations');
+                }
+
+                const data = await response.json();
+                const adsGrid = document.getElementById('adsGrid');
+
+                // Check if we got recommendations
+                if (data.success && data.recommendations && data.recommendations.length > 0) {
+                    const recommendations = data.recommendations;
+
+                    // Show notification if ads were refreshed
+                    const wasRefreshed = localStorage.getItem('adsJustRefreshed');
+                    if (wasRefreshed === 'true') {
+                        showNotificationToast('Personalized ads updated based on your activity!', 'success');
+                        localStorage.removeItem('adsJustRefreshed');
+                    }
+
+                    const gradients = [
+                        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                        'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
+                    ];
+
+                    adsGrid.innerHTML = recommendations.map((rec, index) => {
+                        // The API returns ad data directly, not nested in rec.ad
+                        const ad = rec.ad || rec;  // Try rec.ad first, fallback to rec itself
+
+                        // Add null check
+                        if (!ad || !ad._id) {
+                            console.warn('Invalid ad data:', rec);
+                            return '';
+                        }
+
+                        const score = rec.total_score || 0;
+
+                        return `
+                            <div class="ad-card" 
+                                 style="background: ${gradients[index % gradients.length]}" 
+                                 onclick="handleAdClick('${ad._id}')">
+                                <span class="ad-badge">${ad.category || 'Featured'}</span>
+                                <div class="ad-title">${ad.title}</div>
+                                <div class="ad-description">${ad.description ? ad.description.substring(0, 60) + '...' : 'Click to learn more'}</div>
+                                ${ad.price ? `<div class="ad-price">Rs. ${ad.price.toLocaleString()}</div>` : ''}
+                                ${score > 0 ? `<div style="background: rgba(255,255,255,0.3); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; margin: 0.5rem 0;">${Math.round(score)}% Match</div>` : ''}
+                                <button class="ad-btn">View Details</button>
+                            </div>
+                        `;
+                    }).join('');
+
+                } else {
+                    // No recommendations available, show fallback
+                    adsGrid.innerHTML = getSampleAdsHTML();
+                }
+
+            } catch (error) {
+                console.error('Error loading advertisements:', error);
+                document.getElementById('adsGrid').innerHTML = getSampleAdsHTML();
+            }
+        }
+
+        // Get sample ads (fallback)
+        function getSampleAds() {
+            return [
+                {
+                    _id: '1',
+                    title: 'Nike Air Max 270',
+                    description: 'Premium running shoes with excellent comfort',
+                    category: 'Shoes',
+                    price: 15999,
+                    featured: true
+                },
+                {
+                    _id: '2',
+                    title: 'iPhone 14 Pro Max',
+                    description: 'Latest model with advanced camera system',
+                    category: 'Electronics',
+                    price: 425000,
+                    featured: true
+                },
+                {
+                    _id: '3',
+                    title: 'Toyota Aqua 2019',
+                    description: 'Hybrid vehicle in excellent condition',
+                    category: 'Vehicles',
+                    price: 4500000,
+                    featured: true
+                },
+                {
+                    _id: '4',
+                    title: 'Commercial Land',
+                    description: '20 perches near main road',
+                    category: 'Land',
+                    price: 25000000,
+                    featured: true
+                },
+                {
+                    _id: '5',
+                    title: 'The Psychology of Money',
+                    description: 'Best-selling finance book',
+                    category: 'Books',
+                    price: 2500,
+                    featured: true
+                },
+                {
+                    _id: '6',
+                    title: 'L-Shape Sofa Set',
+                    description: 'Modern 5-seater premium sofa',
+                    category: 'Furniture',
+                    price: 89000,
+                    featured: true
+                }
+            ];
+        }
+
+        // Get sample ads HTML (fallback)
+        function getSampleAdsHTML() {
+            const sampleAds = getSampleAds();
+            const gradients = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
+            ];
+
+            return sampleAds.map((ad, index) => `
+                <div class="ad-card" style="background: ${gradients[index]}" 
+                     onclick="goToMarketplace('${ad._id}')">
+                    <span class="ad-badge">${ad.category}</span>
+                    <div class="ad-title">${ad.title}</div>
+                    <div class="ad-description">${ad.description}</div>
+                    <div class="ad-price">Rs. ${ad.price.toLocaleString()}</div>
+                    <button class="ad-btn">View Details</button>
+                </div>
+            `).join('');
+        }
+
+
+        // Go to marketplace (UPDATED)
+        function goToMarketplace(productId) {
+            // This function kept for backward compatibility
+            // Redirect to marketplace
+            window.location.href = 'marketplace.html';
+        }
+
+        // Handle ad click (NEW FUNCTION)
+        async function handleAdClick(adId) {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('Please login to view this advertisement');
+                window.location.href = 'login-simple.html';
+                return;
+            }
+
+            try {
+                // Track the ad click
+                await fetch(`${API_URL}/ads/click`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ad_id: adId
+                    })
+                });
+
+                console.log('Ad click tracked successfully');
+
+            } catch (error) {
+                console.error('Error tracking ad click:', error);
+            }
+
+            // Redirect to marketplace
+            window.location.href = 'marketplace.html';
+        }
+
+        // Track ad click (KEPT FOR COMPATIBILITY - NOT USED ANYMORE)
+        async function trackAdClick(productId) {
+            try {
+                const token = localStorage.getItem('token');
+                await fetch(`${API_URL}/products/${productId}/click`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error('Error tracking ad click:', error);
+            }
+        }
+
+        // Load stats
+        async function loadStats() {
+            try {
+                const token = localStorage.getItem('token');
+
+                // Load services count
+                const servicesResponse = await fetch(`${API_URL}/services/`);
+                const servicesData = await servicesResponse.json();
+                document.getElementById('totalServices').textContent = servicesData.services.length;
+
+                // Load search history if user is logged in
+                if (token) {
+                    try {
+                        const searchResponse = await fetch(`${API_URL}/search/history`, {
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        const searchData = await searchResponse.json();
+                        document.getElementById('totalSearches').textContent = searchData.searches.length;
+                    } catch (error) {
+                        console.error('Error loading search history:', error);
+                    }
+                }
+
+                // Placeholder for completed and pending applications
+                document.getElementById('completedApplications').textContent = '12';
+                document.getElementById('pendingApplications').textContent = '5';
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // User profile click
+        document.getElementById('userProfile').addEventListener('click', function () {
+            const dropdown = document.createElement('div');
+            dropdown.style.cssText = `
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                padding: 0.5rem;
+                z-index: 1000;
+            `;
+
+            dropdown.innerHTML = `
+                <a href="profile.html" style="display: block; padding: 0.75rem 1rem; color: var(--text-dark); text-decoration: none; border-radius: 6px;">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="search-history.html" style="display: block; padding: 0.75rem 1rem; color: var(--text-dark); text-decoration: none; border-radius: 6px;">
+                    <i class="fas fa-history"></i> Search History
+                </a>
+                <a href="#" onclick="logout()" style="display: block; padding: 0.75rem 1rem; color: #dc2626; text-decoration: none; border-radius: 6px;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            `;
+
+            document.body.appendChild(dropdown);
+
+            setTimeout(() => {
+                document.addEventListener('click', function removeDropdown(e) {
+                    if (!dropdown.contains(e.target) && !document.getElementById('userProfile').contains(e.target)) {
+                        dropdown.remove();
+                        document.removeEventListener('click', removeDropdown);
+                    }
+                });
+            }, 100);
+        });
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'login-simple.html';
+        }
+
+        // Show notification toast
+        function showNotificationToast(message, type = 'success', duration = 3000) {
+            // Remove any existing toasts
+            const existingToast = document.querySelector('.notification-toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            // Create new toast
+            const toast = document.createElement('div');
+            toast.className = `notification-toast ${type}`;
+
+            const icon = type === 'success' ? '✓' :
+                type === 'info' ? 'ℹ' :
+                    type === 'warning' ? '⚠' : '✓';
+
+            toast.innerHTML = `
+                <div class="notification-icon">${icon}</div>
+                <div class="notification-text">${message}</div>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Auto remove after duration
+            setTimeout(() => {
+                toast.style.animation = 'slideInUp 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // Perform search - track the search and redirect
+        // Perform search - track the search and redirect
+        async function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+
+            if (!searchTerm) {
+                showNotificationToast('Please enter a search term', 'warning');
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+
+            // Track the search if user is logged in
+            if (token) {
+                try {
+                    console.log('Tracking search:', searchTerm);
+                    await fetch(`${API_URL}/search/track`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            query: searchTerm,
+                            searchtype: 'governmentservice'
+                        })
+                    });
+
+                    console.log('✅ Search tracked successfully');
+
+                } catch (error) {
+                    console.error('Error tracking search:', error);
+                }
+            }
+
+            // Show notification
+            showNotificationToast(`Searching for "${searchTerm}"`, 'info');
+
+            // Redirect to services page with search query
+            setTimeout(() => {
+                window.location.href = `http://localhost:5000/services.html?search=${encodeURIComponent(searchTerm)}`;
+            }, 500);
+        }
+
+        // ========================================
+        // FLOATING AI CHATBOT FUNCTIONS
+        // ========================================
+
+        let isChatOpen = false;
+
+        // Toggle chat panel visibility
+        function toggleChatPanel() {
+            const panel = document.getElementById('chatPanel');
+            const floatBtn = document.getElementById('chatFloatBtn');
+            const badge = document.getElementById('chatBadge');
+
+            isChatOpen = !isChatOpen;
+
+            if (isChatOpen) {
+                panel.classList.add('active');
+                floatBtn.innerHTML = '<i class="fas fa-times"></i>';
+                badge.style.display = 'none';
+                document.getElementById('chatInput').focus();
+            } else {
+                panel.classList.remove('active');
+                floatBtn.innerHTML = '<i class="fas fa-robot"></i>';
+            }
+        }
+
+        // Handle Enter key in chat input
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        // Handle suggestion chip click
+        function handleSuggestionClick(text) {
+            document.getElementById('chatInput').value = text;
+            sendChatMessage();
+        }
+
+        // Add message to chat
+        function addChatMessage(sender, message) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const welcomeMsg = messagesContainer.querySelector('.chat-welcome');
+
+            // Remove welcome message on first real message
+            if (welcomeMsg) {
+                welcomeMsg.remove();
+            }
+
+            const isUser = sender === 'user';
+            const avatar = isUser ? 'U' : '🤖';
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content">${formatChatMessage(message)}</div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Format chat message (handle markdown-like formatting)
+        function formatChatMessage(message) {
+            // Convert **text** to bold
+            message = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Convert line breaks to <br>
+            message = message.replace(/\n/g, '<br>');
+            return message;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'chat-message ai';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Log chat engagement
+        async function logChatEngagement(query) {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                await fetch(`${API_URL}/search/track`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        search_type: 'chatbot',
+                        source: 'ai_chatbot'
+                    })
+                });
+                console.log('📝 Chat engagement logged:', query);
+            } catch (error) {
+                console.error('Error logging chat engagement:', error);
+            }
+        }
+
+        // Chat session ID (persists during page session)
+        let chatSessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        let currentChatStage = 'GREETING';
+
+        // Send chat message to AI with conversation flow
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('chatSendBtn');
+            const query = input.value.trim();
+
+            if (!query) return;
+
+            // Clear input and disable button
+            input.value = '';
+            sendBtn.disabled = true;
+
+            // Add user message
+            addChatMessage('user', query);
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Get auth token
+                const token = localStorage.getItem('token');
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                // Call new Chat API with conversation flow
+                const response = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({
+                        message: query,
+                        session_id: chatSessionId
+                    })
+                });
+
+                const data = await response.json();
+
+                // Hide typing indicator
+                hideTypingIndicator();
+
+                if (data.success && data.reply) {
+                    // Add AI response
+                    addChatMessage('ai', data.reply);
+
+                    // Update current stage
+                    if (data.stage) {
+                        currentChatStage = data.stage;
+                        console.log('🤖 Chat stage:', currentChatStage);
+                    }
+
+                    // Update suggestions based on response
+                    if (data.suggestions) {
+                        updateSuggestionsFromResponse(data.suggestions);
+                    } else {
+                        updateSuggestions(data.services || []);
+                    }
+                } else {
+                    addChatMessage('ai', data.reply || 'I apologize, but I couldn\'t understand that. Please try again.');
+                }
+
+            } catch (error) {
+                console.error('Chat error:', error);
+                hideTypingIndicator();
+                addChatMessage('ai', 'Sorry, I encountered an error. Please try again later.');
+            }
+
+            sendBtn.disabled = false;
+            input.focus();
+        }
+
+        // Update suggestions from API response
+        function updateSuggestionsFromResponse(suggestions) {
+            const suggestionsContainer = document.getElementById('chatSuggestions');
+
+            if (!suggestions || suggestions.length === 0) {
+                suggestionsContainer.innerHTML = `
+                    <span class="suggestion-chip" onclick="handleSuggestionClick('Hi')">👋 Hi</span>
+                    <span class="suggestion-chip" onclick="handleSuggestionClick('I need help')">🆘 I need help</span>
+                `;
+                return;
+            }
+
+            const suggestionHTML = suggestions.map(text => {
+                // Add appropriate emoji based on content
+                let emoji = '💬';
+                if (text.toLowerCase().includes('passport')) emoji = '🛂';
+                else if (text.toLowerCase().includes('license') || text.toLowerCase().includes('driving')) emoji = '🚗';
+                else if (text.toLowerCase().includes('business')) emoji = '💼';
+                else if (text.toLowerCase().includes('help')) emoji = '🆘';
+                else if (text.toLowerCase().includes('hi') || text.toLowerCase().includes('hello')) emoji = '👋';
+                else if (text.toLowerCase().includes('birth')) emoji = '👶';
+                else if (text.toLowerCase().includes('start over')) emoji = '🔄';
+
+                return `<span class="suggestion-chip" onclick="handleSuggestionClick('${text.replace(/'/g, "\\'")}')">${emoji} ${text}</span>`;
+            }).join('');
+
+            suggestionsContainer.innerHTML = suggestionHTML;
+        }
+
+        // Update suggestions based on conversation (fallback)
+        function updateSuggestions(services) {
+            const suggestionsContainer = document.getElementById('chatSuggestions');
+
+            if (services.length === 0) {
+                // Reset to default suggestions based on stage
+                if (currentChatStage === 'GREETING') {
+                    suggestionsContainer.innerHTML = `
+                        <span class="suggestion-chip" onclick="handleSuggestionClick('Hi')">👋 Hi</span>
+                        <span class="suggestion-chip" onclick="handleSuggestionClick('Hello')">👋 Hello</span>
+                    `;
+                } else if (currentChatStage === 'ASK_HELP') {
+                    suggestionsContainer.innerHTML = `
+                        <span class="suggestion-chip" onclick="handleSuggestionClick('I need help')">🆘 I need help</span>
+                        <span class="suggestion-chip" onclick="handleSuggestionClick('Apply for passport')">🛂 Passport</span>
+                    `;
+                } else {
+                    suggestionsContainer.innerHTML = `
+                        <span class="suggestion-chip" onclick="handleSuggestionClick('Apply for passport')">🛂 Passport</span>
+                        <span class="suggestion-chip" onclick="handleSuggestionClick('Get driving license')">🚗 Driving License</span>
+                        <span class="suggestion-chip" onclick="handleSuggestionClick('Register business')">💼 Business</span>
+                    `;
+                }
+                return;
+            }
+
+            // Generate dynamic suggestions from services
+            const suggestions = services.slice(0, 3).map(service => {
+                const name = service.name || service.title || 'Service';
+                const shortName = name.length > 20 ? name.substring(0, 20) + '...' : name;
+                const icon = service.icon || '📋';
+                return `<span class="suggestion-chip" onclick="handleSuggestionClick('Tell me more about ${name}')">${icon} ${shortName}</span>`;
+            });
+
+            suggestionsContainer.innerHTML = suggestions.join('');
+        }
+
+        // Reset chat conversation
+        function resetChatConversation() {
+            chatSessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            currentChatStage = 'GREETING';
+
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = `
+                <div class="chat-welcome">
+                    <i class="fas fa-robot"></i>
+                    <h4>Hello! I'm your AI Assistant</h4>
+                    <p>Say Hi to start our conversation! I can help you with passport, driving license, birth certificate, and more!</p>
+                </div>
+            `;
+
+            updateSuggestions([]);
+        }
+
+        // Initialize chatbot when page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🤖 AI Chatbot with Conversation Flow initialized');
+            console.log('📍 Session ID:', chatSessionId);
+        });
+
+    </script>
+</body>
+
+</html>
